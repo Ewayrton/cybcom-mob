@@ -10,7 +10,7 @@ import { RefreshScrollView } from '@/components/RefreshScrollView';
 import { StatusBarBlur } from '@/components/StatusBarBlur';
 import { Text } from '@/components/ui/text';
 
-export default function ProfileScreen() {
+export default function StoreScreen() {
   const insets = useSafeAreaInsets();
   const FULL_HEADER_HEIGHT = 50 + insets.top;
 
@@ -48,7 +48,7 @@ export default function ProfileScreen() {
         fullHeight={FULL_HEADER_HEIGHT}
       >
         <Text className="text-lg font-bold text-black dark:text-white">
-          Perfil
+          Loja
         </Text>
       </TopHeader>
 
@@ -66,7 +66,7 @@ export default function ProfileScreen() {
         }}
       >
         <Text className="text-xl font-bold text-slate-500 dark:text-slate-400">
-          Página Perfil
+          Página Loja
         </Text>
       </RefreshScrollView>
 
