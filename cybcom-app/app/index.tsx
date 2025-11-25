@@ -20,8 +20,8 @@ export default function IndexScreen() {
       <Box className="flex-1 items-center justify-center px-8">
         {/* Logo / ícone do app */}
         <Image
-          source={require("../assets/images/icon.png")}
-          style={{ width: 80, height: 80, borderRadius: 20, marginBottom: 24 }}
+          source={require("../assets/images/logo-cybcom-sem-fundoPNG.png")}
+          style={{ width: 60, height: 75, borderRadius: 20, marginBottom: 24 }}
         />
 
         <Text className={`text-3xl font-extrabold mb-2 ${titleColor}`}>
@@ -40,22 +40,22 @@ export default function IndexScreen() {
           action="primary"
           onPress={() => router.push("/(main)/feed" as any)}
         >
-          <ButtonText className="text-white text-base">
+          <ButtonText className="text-black text-base">
             Login
           </ButtonText>
         </Button>
 
         {/* Botão de Cadastro */}
-        <Button
-          className="w-full"
-          variant="outline"
-          action="secondary"
-          onPress={() => router.push("/(main)/register" as any)}
-        >
-          <ButtonText className="text-base text-sky-500 dark:text-sky-400">
-            Cadastrar
-          </ButtonText>
-        </Button>
+          <Button
+            className="w-full bg-[#64FFDA] border-0"
+            variant="solid"
+            action="primary"
+            onPress={() => router.push("/(main)/register" as any)}
+          >
+            <ButtonText className="text-base text-black font-bold">
+              Cadastrar
+            </ButtonText>
+          </Button>
       </Box>
 
       {/* Rodapé simples */}
