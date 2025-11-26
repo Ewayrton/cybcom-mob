@@ -14,7 +14,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   
-  // Carregamento de fontes (pode comentar se ainda não tiver o arquivo)
+  // Carregamento de fontes
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -30,15 +30,17 @@ export default function RootLayout() {
   }
 
   return (
-    // 2. Envolvemos tudo no GluestackUIProvider para os estilos funcionarem
     <GluestackUIProvider mode="dark">
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
-          {/* A tela de Login (index) precisa estar aqui explicitamente */}
+          {/* Tela de Login/Entrada */}
           <Stack.Screen name="index" options={{ headerShown: false }} />
           
-          {/* A pasta (main) onde está o feed */}
+          {/* Grupo Principal (User) */}
           <Stack.Screen name="(main)" options={{ headerShown: false }} />
+
+          {/* Grupo Admin (Novo) - Isolado do fluxo principal */}
+          <Stack.Screen name="(admin)" options={{ headerShown: false }} />
           
           <Stack.Screen name="+not-found" />
         </Stack>
