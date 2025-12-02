@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Image, TextStyle } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, TouchableOpacity, StyleSheet, Image, TextStyle, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { useSharedValue, useAnimatedScrollHandler } from 'react-native-reanimated';
-import { useColorScheme } from 'nativewind'; // Importar para controlar estilos manuais
+import { useColorScheme } from 'nativewind';
+
+// Stores & Services
+import { usePostsStore } from '@/stores/usePostsStore';
 
 // Componentes
 import { TopHeader } from '@/components/TopHeader';
@@ -23,6 +26,14 @@ export default function FeedScreen() {
   const [activeTab, setActiveTab] = useState<'forYou' | 'following'>('forYou');
   const { colorScheme } = useColorScheme();
   
+  // Hook da Store (Zustand)
+  const { posts, fetchPosts, isLoading } = usePostsStore();
+
+  // Carregar posts ao abrir a tela
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
   const insets = useSafeAreaInsets();
   const HEADER_HEIGHT = 88;
   const FULL_HEADER_HEIGHT = HEADER_HEIGHT + insets.top;
@@ -51,26 +62,20 @@ export default function FeedScreen() {
     },
   });
 
-  const onScrollRefresh = () => {
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        console.log('Refresh concluído.');
-        resolve();
-      }, 1500);
-    });
+  const onScrollRefresh = async () => {
+    // Recarrega os dados reais do backend
+    await fetchPosts();
   };
 
-  // Estilos das abas (precisam ser manuais pois estão em style={{...}})
   const getTextStyle = (isActive: boolean): TextStyle => ({
     color: isActive 
-      ? (colorScheme === 'dark' ? '#FFFFFF' : '#000000') // Ativo: Branco(Dark) ou Preto(Light)
-      : '#71767B', // Inativo: Cinza
+      ? (colorScheme === 'dark' ? '#FFFFFF' : '#000000') 
+      : '#71767B',
     fontWeight: isActive ? '700' : '500',
     fontSize: 15,
   });
 
   return (
-    // 1. CORREÇÃO: bg-white no claro, bg-black no escuro
     <View className="flex-1 bg-white dark:bg-black">
       <Stack.Screen options={{ headerShown: false }} />
       <StatusBarBlur />
@@ -122,45 +127,79 @@ export default function FeedScreen() {
           },
         }}
       >
-        {/* 2. CORREÇÃO: Fundo da lista */}
         <Box className="flex-1 min-h-screen bg-white dark:bg-black">
           <Box className="px-0">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <Box key={i} className="mb-1 border-b border-outline-100 dark:border-outline-800 py-4 px-4">
+            
+            {/* Loading State */}
+            {isLoading && posts.length === 0 && (
+              <Box className="py-10 items-center">
+                <ActivityIndicator size="large" color="#64FFDA" />
+              </Box>
+            )}
+
+            {/* Empty State */}
+            {!isLoading && posts.length === 0 && (
+              <Box className="py-10 items-center px-6">
+                <Text className="text-gray-500 text-center">
+                  Ainda não há publicações. Seja o primeiro a postar!
+                </Text>
+              </Box>
+            )}
+
+            {/* Lista Real de Posts */}
+            {posts.map((post) => (
+              <Box key={post.id} className="mb-1 border-b border-outline-100 dark:border-outline-800 py-4 px-4">
                 <HStack space="md" className="items-start">
+                   {/* Avatar do Usuário */}
                    <Avatar size="sm" className="bg-primary-600">
-                    <AvatarFallbackText>U{i}</AvatarFallbackText>
-                    <AvatarImage 
-                      source={{ uri: `https://i.pravatar.cc/150?u=${i + 10}` }} 
-                    />
+                    <AvatarFallbackText>{post.user?.name || 'User'}</AvatarFallbackText>
+                    {post.user?.avatar && (
+                      <AvatarImage 
+                        source={{ uri: post.user.avatar }} 
+                      />
+                    )}
                   </Avatar>
                   
                   <VStack className="flex-1">
                     <HStack className="justify-between items-center mb-1">
                         <HStack space="xs" className="items-center">
-                            {/* 3. CORREÇÃO: Cores dos textos do post */}
-                            <Text className="text-black dark:text-white font-bold text-base">User {i + 1}</Text>
-                            <Text className="text-typography-500 dark:text-typography-400 text-sm">@usuario_{i + 1} · 2h</Text>
+                            <Text className="text-black dark:text-white font-bold text-base">
+                              {post.user?.name || 'Usuário Desconhecido'}
+                            </Text>
+                            <Text className="text-typography-500 dark:text-typography-400 text-sm">
+                              {/* Exibe data simples ou use biblioteca como date-fns */}
+                              @{post.user?.username || 'user'} · {new Date(post.createdAt).toLocaleDateString()}
+                            </Text>
                         </HStack>
                         <Icon as={ThreeDotsIcon} className="text-typography-400" size="sm" />
                     </HStack>
 
+                    {/* Conteúdo do Post */}
                     <Text className="text-black dark:text-white text-base leading-6 mb-3">
-                      Post {i + 1}. O tema agora se adapta automaticamente! No modo claro, fundo branco e texto preto. No escuro, fundo preto e texto branco. 🚀
+                      {post.content}
                     </Text>
+
+                    {/* Imagem do Post (se houver) */}
+                    {post.image_url && (
+                       <Image 
+                         source={{ uri: post.image_url }}
+                         style={{ width: '100%', height: 200, borderRadius: 12, marginBottom: 12 }}
+                         resizeMode="cover"
+                       />
+                    )}
 
                     <HStack className="justify-between pr-8">
                         <HStack space="xs" className="items-center">
                             <Icon as={MessageCircleIcon} className="text-typography-400" size="sm" />
-                            <Text className="text-typography-400 text-xs">12</Text>
+                            <Text className="text-typography-400 text-xs">0</Text>
                         </HStack>
                         <HStack space="xs" className="items-center">
                              <Icon as={ShareIcon} className="text-typography-400" size="sm" />
-                             <Text className="text-typography-400 text-xs">5</Text>
+                             <Text className="text-typography-400 text-xs">0</Text>
                         </HStack>
                         <HStack space="xs" className="items-center">
                             <Icon as={FavouriteIcon} className="text-typography-400" size="sm" />
-                            <Text className="text-typography-400 text-xs">84</Text>
+                            <Text className="text-typography-400 text-xs">0</Text>
                         </HStack>
                         <Icon as={ShareIcon} className="text-typography-400" size="sm" />
                     </HStack>
@@ -168,6 +207,7 @@ export default function FeedScreen() {
                 </HStack>
               </Box>
             ))}
+
           </Box>
         </Box>
       </RefreshScrollView>

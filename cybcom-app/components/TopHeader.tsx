@@ -12,16 +12,16 @@ interface TopHeaderProps {
   children?: React.ReactNode;
   rightAction?: React.ReactNode;
   bottomContent?: React.ReactNode;
-  headerTranslateY?: SharedValue<number>; 
-  fullHeight?: number;              
+  headerTranslateY?: SharedValue<number>;
+  fullHeight?: number;
 }
 
-export function TopHeader({ 
-  children, 
-  rightAction, 
-  bottomContent, 
-  headerTranslateY, 
-  fullHeight = 100 
+export function TopHeader({
+  children,
+  rightAction,
+  bottomContent,
+  headerTranslateY,
+  fullHeight = 100
 }: TopHeaderProps) {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
@@ -44,7 +44,7 @@ export function TopHeader({
     if (!headerTranslateY) return { opacity: 1 };
     const opacity = interpolate(
       headerTranslateY.value,
-      [-fullHeight * 0.8, 0], 
+      [-fullHeight * 0.8, 0],
       [0, 1],
       Extrapolation.CLAMP
     );
@@ -66,15 +66,15 @@ export function TopHeader({
       ]}
     >
       {Platform.OS !== 'web' && (
-        <BlurView 
-          intensity={90} 
-          tint={isDark ? "dark" : "light"} 
-          style={StyleSheet.absoluteFill} 
+        <BlurView
+          intensity={90}
+          tint={isDark ? "dark" : "light"}
+          style={StyleSheet.absoluteFill}
         />
       )}
 
       <Animated.View style={[styles.contentWrapper, contentStyle]}>
-        
+
         {/* === LINHA SUPERIOR === */}
         <View style={styles.topRow}>
           
@@ -83,8 +83,8 @@ export function TopHeader({
             <TouchableOpacity onPress={openDrawer} activeOpacity={0.7}>
               <Avatar size="sm" className="bg-gray-700">
                 <AvatarFallbackText>U</AvatarFallbackText>
-                <AvatarImage 
-                  source={{ uri: "https://github.com/ewayrton.png" }} 
+                <AvatarImage
+                  source={{ uri: "https://github.com/ewayrton.png" }}
                   alt="Perfil"
                 />
               </Avatar>
@@ -98,7 +98,7 @@ export function TopHeader({
 
           {/* Direita */}
           <View style={[styles.sideItem, { alignItems: 'flex-end' }]}>
-            {rightAction ? rightAction : <View style={{ width: 32 }} />} 
+            {rightAction ? rightAction : <View style={{ width: 32 }} />}
           </View>
         </View>
 
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     top: 0, left: 0, right: 0, zIndex: 1000,
     backgroundColor: 'rgba(0,0,0,0.75)', 
     borderBottomWidth: 1,
-    borderBottomColor: '#2F3336', 
+    borderBottomColor: '#2F3336',
   },
   contentWrapper: {
     paddingBottom: 0,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   sideItem: {
-    width: 40, 
+    width: 40,
     justifyContent: 'center',
   },
   centerItem: {
