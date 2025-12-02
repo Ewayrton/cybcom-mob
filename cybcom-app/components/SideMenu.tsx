@@ -9,7 +9,7 @@ import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
 import { router, usePathname } from "expo-router";
 import { useColorScheme } from "nativewind";
-import { useAuthStore } from "@/app/store/useAuthStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { ThemeSwitcher } from './ThemeSwitcher';
 
 import {
