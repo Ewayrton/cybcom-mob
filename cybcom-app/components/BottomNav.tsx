@@ -6,13 +6,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Home,
   Search,
-  Plus, // Novo ícone para New Post
+  Plus,
   Bell,
-  Info, // Novo ícone para Sobre/About
+  Info, 
   type LucideIcon,
 } from "lucide-react-native";
 
-// Atualizando os tipos das chaves de navegação
 type TabKey = "home" | "search" | "new-post" | "notifications" | "about";
 
 type TabItem = {
@@ -22,11 +21,11 @@ type TabItem = {
 };
 
 const tabs: TabItem[] = [
-  { key: "home",          icon: Home,      path: "/feed" },          // Feed
-  { key: "search",        icon: Search,    path: "/search" },        // Busca
-  { key: "new-post",      icon: Plus,      path: "/new-post" },      // Novo Post (Central)
-  { key: "notifications", icon: Bell,      path: "/notification" },  // Notificações
-  { key: "about",         icon: Info,      path: "/about" },         // Sobre
+  { key: "home",          icon: Home,      path: "/feed" },          
+  { key: "search",        icon: Search,    path: "/search" },        
+  { key: "new-post",      icon: Plus,      path: "/new-post" },      
+  { key: "notifications", icon: Bell,      path: "/notification" },  
+  { key: "about",         icon: Info,      path: "/about" },         
 ];
 
 export function BottomNav() {
@@ -56,9 +55,7 @@ export function BottomNav() {
         {tabs.map((tab) => {
           const active = getIsActive(tab.path);
           const ActiveIcon = tab.icon;
-
-          // Lógica especial para o ícone central (+) se quiser destacá-lo,
-          // ou mantê-lo padrão. Aqui mantive a lógica de cor padrão.
+          // Define a cor do ícone com base no estado ativo e no tema
           const iconColor = active
             ? isDark
               ? "#f9fafb" // Branco no dark mode
