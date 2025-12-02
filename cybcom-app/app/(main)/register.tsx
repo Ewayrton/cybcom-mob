@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { router } from "expo-router";
+import { Pressable } from "react-native";
 
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
@@ -21,7 +22,17 @@ export default function RegisterScreen() {
   return (
     <View className="flex-1 bg-slate-50 dark:bg-black">
       <Box className="flex-1 justify-center px-8">
-        
+
+        {/* BOTÃO VOLTAR */}
+          <Button
+            className="w-24 mb-6 bg-[#64FFDA] border-0"
+            variant="solid"
+            action="primary"
+            onPress={() => router.push("/")}
+          >
+            <ButtonText className="text-base font-bold text-black">Voltar</ButtonText>
+        </Button>
+
         {/* Título */}
         <Text className="text-3xl font-extrabold mb-2 text-slate-900 dark:text-white">
           Criar conta
@@ -107,16 +118,16 @@ export default function RegisterScreen() {
         </Button>
 
         {/* JÁ TEM CONTA? LOGIN */}
-        <Box className="items-center mt-2">
+        <Box className="items-center mt-2 flex-row">
           <Text className="text-slate-700 dark:text-slate-300">
-            Já tem uma conta?{" "}
-            <Text
-              className="text-primary-600 dark:text-[#64FFDA] font-bold"
-              onPress={() => router.push("/(main)/login" as any)}
-            >
+            Já tem uma conta?
+          </Text>
+
+          <Pressable onPress={() => router.push("/(main)/login" as any)}>
+            <Text className="ml-1 text-primary-600 dark:text-[#64FFDA] font-bold">
               Faça login
             </Text>
-          </Text>
+          </Pressable>
         </Box>
       </Box>
     </View>
