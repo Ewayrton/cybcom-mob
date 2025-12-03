@@ -1,14 +1,14 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// IP da rede Wi-Fi (Adaptador Wi-Fi)
-const BASE_URL = 'http://192.168.0.240:8080'; 
+// URL de Produção (Vercel)
+const BASE_URL = 'https://backend-cyb-com.vercel.app'; 
 
 const api = axios.create({
   baseURL: BASE_URL,
 });
 
-// Interceptor para adicionar o Token automaticamente
+// Interceptor para enviar o token automaticamente se o usuário estiver logado
 api.interceptors.request.use(async (config) => {
   try {
     const token = await AsyncStorage.getItem('@cybcom:token');
