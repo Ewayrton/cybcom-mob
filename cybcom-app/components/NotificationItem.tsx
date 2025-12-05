@@ -39,7 +39,7 @@ export function NotificationItem({
                         <AvatarImage source={{ uri: avatarUrl }} alt="Avatar" />
                     </Avatar>
                     {!isRead && (
-                        <View className="absolute top-0 right-0 bg-blue-500 w-3 h-3 rounded-full border-2 border-white dark:border-black" />
+                        <View className="absolute top-0 right-0 bg-[#64FFDA] w-3 h-3 rounded-full border-2 border-white dark:border-black" />
                     )}
                 </View>
 
