@@ -1,6 +1,6 @@
 // cybcom-app/app/(main)/edit-profile.tsx
 
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { router, Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -21,28 +21,29 @@ import {
 } from "@/components/ui/avatar";
 import { Pressable } from "@/components/ui/pressable";
 import { Divider } from "@/components/ui/divider";
+import { useUserStore } from "@/stores/useUserStore";
 // import userServices from "@/services/userService";
 // Importe o serviço real para a chamada à API de atualização
 
 // Dados de usuário mockados para inicialização (Em um cenário real, você buscará do useUserStore)
-const mockUser = {
-  id: "user-123", // Adicionado ID para simular a chamada API
-  name: "Deivyson José",
-  email: "deivyson@example.com",
-  website: "https://deivyson-silva.vercel.app",
-  linkedin: "https://linkedin.com/in/deivyson",
-  github: "https://github.com/deivyson",
-  avatar: "https://i.pravatar.cc/300",
-};
+// const user = {
+//   name: "Deivyson José",
+//   email: "deivyson@example.com",
+//   website: "https://deivyson-silva.vercel.app",
+//   linkedin: "https://linkedin.com/in/deivyson",
+//   github: "https://github.com/deivyson",
+//   avatar: "https://i.pravatar.cc/300",
+// };
 
 export default function EditProfileScreen() {
   const insets = useSafeAreaInsets();
+  const {user} = useUserStore()
   // 1. Estados para os campos do formulário, inicializados com os dados atuais
-  const [name, setName] = useState(mockUser.name);
-  const [website, setWebsite] = useState(mockUser.website);
-  const [linkedin, setLinkedin] = useState(mockUser.linkedin);
-  const [github, setGithub] = useState(mockUser.github);
-  const [avatarUrl, setAvatarUrl] = useState(mockUser.avatar);
+  const [name, setName] = useState<string | null>("");
+  const [website, setWebsite] = useState<string | null>("");
+  const [linkedin, setLinkedin] = useState<string | null>("");
+  const [github, setGithub] = useState<string | null>("");
+  const [avatar, setAvatar] = useState<string | null>("https://i.pravatar.cc/300");
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
@@ -53,12 +54,12 @@ export default function EditProfileScreen() {
       website: website || null, // Garante que strings vazias sejam null para a store/API
       linkedin: linkedin || null,
       github: github || null,
-      avatar: avatarUrl,
+      avatar: avatar,
     };
 
     try {
       // **Implementação Real:** Chamar o serviço de atualização
-      // const updatedUser = await userServices.updateProfile(mockUser.id, userDataToUpdate);
+      // const updatedUser = await userServices.updateProfile(user.id, userDataToUpdate);
       // useUserStore.getState().setUser(updatedUser); // Atualiza o estado global
 
       // Simulação de delay de API
@@ -74,6 +75,15 @@ export default function EditProfileScreen() {
       setLoading(false);
     }
   };
+
+  useEffect(()=>{
+    if (user) {
+      setGithub(user.github)
+      setName(user.name)
+      setWebsite(user.website)
+      setLinkedin(user.linkedin)
+    }
+  },[])
 
   return (
     <View className="flex-1 bg-white dark:bg-black">
@@ -105,7 +115,7 @@ export default function EditProfileScreen() {
           <VStack className="items-center" space="md">
             <Avatar size="2xl">
               <AvatarFallbackText>{name}</AvatarFallbackText>
-              <AvatarImage source={{ uri: avatarUrl }} />
+              <AvatarImage source={{ uri: avatar as string }} />
             </Avatar>
             <Pressable
               onPress={() => alert("Função de upload de foto pendente!")}
@@ -129,7 +139,7 @@ export default function EditProfileScreen() {
                 <InputField
                   placeholder="Seu nome"
                   placeholderTextColor="#9CA3AF"
-                  value={name}
+                  value={user?.name}
                   onChangeText={setName}
                 />
               </Input>
@@ -143,7 +153,7 @@ export default function EditProfileScreen() {
               <Input className="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 opacity-60">
                 <InputField
                   placeholderTextColor="#9CA3AF"
-                  value={mockUser.email}
+                  value={user?.email}
                   editable={false}
                 />
               </Input>
