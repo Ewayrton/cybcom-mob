@@ -8,15 +8,16 @@ import { BottomNav } from "@/components/BottomNav";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { categoryService } from "@/services/categoryService";
 import { usecategorysStore } from "@/stores/useCategoryStore";
+import { postsService } from "@/services/postsService";
+import { router } from "expo-router";
 
 export default function NewPost() {
     const insets = useSafeAreaInsets();
     const { categories, setCatecories } = usecategorysStore()
-    const [titulo, setTitulo] = useState("");
-    const [descricao, setDescricao] = useState("");
-    const [imagem, setImagem] = useState<string | null>(null);
-    const [categoriaId, setCategoriaId] = useState<number | null>(null);
-    const [categorias, setCategorias] = useState<{ id: number; name: string }[]>([]);
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [imagem, setImagem] = useState<string | undefined>(undefined);
+    const [categoryId, setCategoryId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
 
     //  BUSCAR CATEGORIAS
@@ -46,12 +47,21 @@ export default function NewPost() {
     }
 
     function removeImage() {
-        setImagem(null);
+        setImagem(undefined);
     }
 
     async function handlePublish() {
-
-    }
+            if (!title || !content || !categoryId) return Alert.alert('Preencha todos os campos')
+            
+            try {
+                await postsService.create({title: title, content: content, categoryId: categoryId, image_url: imagem})
+                Alert.alert("Criado com sucesso")
+                router.back()
+            } catch (error: any) {
+                Alert.alert(`Erro: ${error.message}`)
+            }
+        
+        }
 
     return (
         <View className="flex-1 bg-black">
@@ -63,16 +73,16 @@ export default function NewPost() {
                     <Text className="text-white mb-1">Título</Text>
                     <TextInput
                         className="bg-[#1A2C3A] text-white p-3 rounded-xl mb-4"
-                        value={titulo}
-                        onChangeText={setTitulo}
+                        value={title}
+                        onChangeText={setTitle}
                     />
 
                     <Text className="text-white mb-1">Descrição</Text>
                     <TextInput
                         multiline
                         className="bg-[#1A2C3A] text-white p-3 rounded-xl mb-4"
-                        value={descricao}
-                        onChangeText={setDescricao}
+                        value={content}
+                        onChangeText={setContent}
                     />
 
                     <Text className="text-white mb-1">Categoria</Text>
@@ -84,10 +94,10 @@ export default function NewPost() {
                         {categories.map((cat) => (
                             <TouchableOpacity
                                 key={cat.id}
-                                className={`p-3 ${categoriaId === cat.id ? "bg-[#64FFDA]" : ""}`}
-                                onPress={() => setCategoriaId(cat.id)}
+                                className={`p-3 ${categoryId === cat.id ? "bg-[#64FFDA]" : ""}`}
+                                onPress={() => setCategoryId(cat.id)}
                             >
-                                <Text className={categoriaId === cat.id ? "text-black" : "text-white"}>
+                                <Text className={categoryId === cat.id ? "text-black" : "text-white"}>
                                     {cat.name}
                                 </Text>
                             </TouchableOpacity>
