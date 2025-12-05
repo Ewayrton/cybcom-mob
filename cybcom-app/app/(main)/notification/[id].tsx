@@ -45,13 +45,6 @@ export default function NotificationDetailsScreen() {
                 </Text>
             </TopHeader>
 
-            {/* Custom Back Button overlaying or integrated if TopHeader allowed left action customization easily. 
-          Since TopHeader seems to have fixed left side (Avatar/Drawer), we might want to override or just place a back button below.
-          However, usually a details screen should have a back button instead of the drawer menu.
-          For now, let's put a back button in the content area or modify TopHeader usage.
-          Actually, TopHeader has `children` for center content. 
-          Let's try to use a custom header or just content below TopHeader.
-      */}
 
             <ScrollView
                 contentContainerStyle={{
@@ -94,11 +87,11 @@ export default function NotificationDetailsScreen() {
                 <Box className="gap-4">
                     <Button
                         action="primary"
-                        className="w-full bg-blue-600 h-12"
+                        className="w-full bg-[#64FFDA] h-12"
                         onPress={() => console.log('Ver publicação')}
                     >
-                        <Eye color="white" size={20} style={{ marginRight: 8 }} />
-                        <ButtonText className="text-white font-bold text-lg">Ver Publicação</ButtonText>
+                        <Eye color="black" size={20} style={{ marginRight: 8 }} />
+                        <ButtonText className="text-black font-bold text-lg">Ver Publicação</ButtonText>
                     </Button>
 
                     <Button

@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useColorScheme } from 'nativewind';
 import { router } from 'expo-router';
 import { MOCK_NOTIFICATIONS } from '@/utils/notificationsData';
+import { BottomNav } from '@/components/BottomNav';
 
 export default function NotificationScreen() {
     const insets = useSafeAreaInsets();
@@ -72,6 +73,7 @@ export default function NotificationScreen() {
                     </Box>
                 }
             />
+            <BottomNav />
         </View>
     );
 }
