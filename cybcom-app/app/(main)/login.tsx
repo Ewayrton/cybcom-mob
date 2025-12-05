@@ -1,17 +1,29 @@
 import React, { useState } from "react";
-import { View, TextInput, Image } from "react-native";
+import { View, TextInput, Image, Alert } from "react-native";
 import { router } from "expo-router";
 
 // UI Components
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
+import { authService } from "@/services/authService";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function Login() {
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [password, setPassword] = useState("");
+  const { signInStore } = useAuthStore()
+  async function handleLogin() {
+    if (!email || !password) return Alert.alert('Insira todos os dados!')
 
-  function handleLogin() {
+    let tokens;
+    try {
+      tokens = await authService.signIn(email, password)
+    } catch (error: any) {
+      return Alert.alert(`Erro: ${error.message}`)
+    }
+    signInStore(tokens)
+
     router.push("/(main)/feed");
   }
 
@@ -43,15 +55,15 @@ export default function Login() {
             onChangeText={setEmail}
           />
 
-          {/* Senha */}
-          <Text className="text-white mb-1 text-base font-medium">Senha</Text>
+          {/* senha */}
+          <Text className="text-white mb-1 text-base font-medium">senha</Text>
           <TextInput
             className="w-full bg-[#1A2C3A] text-white p-3 rounded-xl mb-6 text-base"
             placeholder="Digite sua senha"
             placeholderTextColor="#ccc"
             secureTextEntry
-            value={senha}
-            onChangeText={setSenha}
+            value={password}
+            onChangeText={setPassword}
           />
 
           {/* Botão */}
@@ -71,7 +83,7 @@ export default function Login() {
       {/* Rodapé */}
       <Box className="items-center pb-6">
         <Text className="text-xs text-slate-400">
-          Esqueceu a senha?
+          Esqueceu a password?
         </Text>
       </Box>
     </View>

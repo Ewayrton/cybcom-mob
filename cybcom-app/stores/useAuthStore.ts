@@ -11,7 +11,7 @@ type AuthState = {
   accessToken: string | null;
   refreshToken: string | null;
   isLoading: boolean;
-  signIn: (tokens: Tokens) => void;
+  signInStore: (tokens: Tokens) => void;
   signOut: () => void;
 };
 
@@ -22,7 +22,7 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       isLoading: false,
 
-      signIn: (tokens) =>
+      signInStore: (tokens) =>
         set({
           accessToken: tokens.access,
           refreshToken: tokens.refresh,
@@ -35,7 +35,7 @@ export const useAuthStore = create<AuthState>()(
         }),
     }),
     {
-      name: 'auth-storage', // nome da chave no AsyncStorage
+      name: 'auth-storage',
       storage: {
         getItem: async (key) => {
           const value = await AsyncStorage.getItem(key);
