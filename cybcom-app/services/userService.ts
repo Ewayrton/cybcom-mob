@@ -1,5 +1,4 @@
 import axios from "axios";
-import "dotenv/config";
 import { dataUser } from "@/stores/useUserStore";
 
 const URL_BASE = `${process.env.API_URL}/users`;
