@@ -8,33 +8,33 @@ import { Input, InputField } from "@/components/ui/input";
 import { Button, ButtonText } from "@/components/ui/button";
 
 export default function RegisterScreen() {
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [confirmSenha, setConfirmSenha] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async () => {
-    if (!nome || !email || !senha || !confirmSenha) {
+    if (!name || !email || !password || !confirmPassword) {
       return Alert.alert("Atenção", "Por favor, preencha todos os campos.");
     }
-    if (senha !== confirmSenha) {
-      return Alert.alert("Erro", "As senhas não coincidem.");
+    if (password !== confirmPassword) {
+      return Alert.alert("Erro", "As passwords não coincidem.");
     }
 
     try {
       setIsLoading(true);
       
-      // O 'nome' digitado no input será enviado como 'username' para o backend
-      await authService.register(nome, email, senha);
+      // O 'name' digitado no input será enviado como 'username' para o backend
+      await authService.register(name, email, password);
 
       Alert.alert("Sucesso", "Conta criada! Faça login para continuar.", [
         { text: "OK", onPress: () => router.back() }
       ]);
 
     } catch (error: any) {
-      const msg = error.response?.data?.message || "Não foi possível criar a conta.";
+      const msg = error.message || "Não foi possível criar a conta.";
       Alert.alert("Erro", msg);
     } finally {
       setIsLoading(false);
@@ -63,9 +63,9 @@ export default function RegisterScreen() {
         </Text>
 
         <Box className="mb-4">
-          <Text className="text-sm text-slate-700 dark:text-slate-300 mb-1">Nome de Usuário</Text>
+          <Text className="text-sm text-slate-700 dark:text-slate-300 mb-1">name de Usuário</Text>
           <Input className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700">
-            <InputField placeholder="Seu nome" placeholderTextColor="#9CA3AF" value={nome} onChangeText={setNome} />
+            <InputField placeholder="Seu nome" placeholderTextColor="#9CA3AF" value={name} onChangeText={setName} />
           </Input>
         </Box>
 
@@ -77,16 +77,16 @@ export default function RegisterScreen() {
         </Box>
 
         <Box className="mb-4">
-          <Text className="text-sm text-slate-700 dark:text-slate-300 mb-1">Senha</Text>
+          <Text className="text-sm text-slate-700 dark:text-slate-300 mb-1">password</Text>
           <Input className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700">
-            <InputField placeholder="Sua senha" placeholderTextColor="#9CA3AF" secureTextEntry value={senha} onChangeText={setSenha} />
+            <InputField placeholder="Sua password" placeholderTextColor="#9CA3AF" secureTextEntry value={password} onChangeText={setPassword} />
           </Input>
         </Box>
 
         <Box className="mb-6">
-          <Text className="text-sm text-slate-700 dark:text-slate-300 mb-1">Confirmar senha</Text>
+          <Text className="text-sm text-slate-700 dark:text-slate-300 mb-1">Confirmar password</Text>
           <Input className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700">
-            <InputField placeholder="Repita a senha" placeholderTextColor="#9CA3AF" secureTextEntry value={confirmSenha} onChangeText={setConfirmSenha} />
+            <InputField placeholder="Repita a password" placeholderTextColor="#9CA3AF" secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
           </Input>
         </Box>
 
