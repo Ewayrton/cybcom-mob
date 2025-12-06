@@ -23,7 +23,7 @@ type TabItem = {
 const tabs: TabItem[] = [
   { key: "home",          icon: Home,      path: "/feed" },          
   { key: "search",        icon: Search,    path: "/search" },        
-  { key: "new-post",      icon: Plus,      path: "/new-post" },      
+  { key: "new-post",      icon: Plus,      path: "/newPost" },      
   { key: "notifications", icon: Bell,      path: "/notification" },  
   { key: "about",         icon: Info,      path: "/about" },         
 ];
